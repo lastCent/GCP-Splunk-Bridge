@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: splunk-forwarder
+  namespace: default
+  labels:
+    k8s-app: splunk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: splunk
+  template:
+    metadata:
+      labels:
+        k8s-app: splunk
+        name: splunk
+    spec:
+      hostname: splunk-h-forwarder
+      containers:
+      - name: splunk
+        image: gcr.io/pantel-2decb/splunk:latest
+        ports:
+        - name: web-ui
+          containerPort: 8000
+        env:
+        - name: SPLUNK_START_ARGS
+          value: "--accept-license"
+        - name: SPLUNK_USER
+          value: "root"
+
