@@ -1,3 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: splunk-space
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -20,6 +25,10 @@ spec:
       containers:
       - name: splunk
         image: gcr.io/pantel-2decb/splunk:latest
+        volumeMounts:
+        - name: sa-secret
+          mountPath: "/etc/gcp_credentials"
+          readOnly: true
         ports:
         - name: web-ui
           containerPort: 8000
@@ -28,4 +37,8 @@ spec:
           value: "--accept-license"
         - name: SPLUNK_USER
           value: "root"
+      volumes:
+      - name: sa-secret
+        secret:
+          secretName: splunk-google-application-credentials
 
