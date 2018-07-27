@@ -1,8 +1,4 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: splunk-space
----
+# The Splunk forwarder deployment
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:

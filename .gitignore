@@ -1,7 +1,6 @@
 # Project specific files
 # --------------------------------
-splunk-configured-docker/sa_key
-google_cloud_credentials.conf
+splunk-hf-*.tgz
 
 # Terraform files
 # --------------------------------

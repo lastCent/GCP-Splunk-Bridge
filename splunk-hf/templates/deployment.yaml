@@ -1,0 +1,45 @@
+# The Splunk heavy forwarder deployment for GCP
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "splunk-hf-helm.fullname" . }} 
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ template "splunk-hf-helm.name" . }}
+    chart: {{ template "splunk-hf-helm.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "splunk-hf-helm.name" . }}
+      chart: {{ template "splunk-hf-helm.chart" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "splunk-hf-helm.name" . }}
+        chart: {{ template "splunk-hf-helm.chart" . }}
+    spec:
+      hostname: {{ .Values.hostname }}
+      containers:
+      - name: {{ .Chart.Name }} 
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        volumeMounts:
+        - name: {{ .Values.serviceAccountSecret.name }}
+          mountPath: {{ .Values.serviceAccountSecret.mountPath }}
+          readOnly: {{ .Values.serviceAccountSecret.readOnly }}
+        # DEBUG
+        ports:
+        - name: web-ui
+          containerPort: 8000
+        env:
+        - name: SPLUNK_START_ARGS
+          value: "--accept-license"
+        - name: SPLUNK_USER
+          value: "root"
+      volumes:
+      - name: {{ .Values.serviceAccountSecret.name }}
+        secret:
+          secretName: {{ .Values.serviceAccountSecret.secretName }}
+
