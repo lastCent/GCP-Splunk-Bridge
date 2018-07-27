@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create docker image, deploy to cluster
-# Mean for debugging, not production
+# Meant for debugging, not production
 
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
@@ -12,6 +12,6 @@ sudo docker login -u oauth2accesstoken -p "$(gcloud auth print-access-token)" ht
 sudo docker push gcr.io/pantel-2decb/splunk 
 sudo docker logout gcr.io
 cd ..  
-kubectl delete deployment splunk-forwarder
-kubectl apply -f splunk-deployment.yaml
+#kubectl delete deployment splunk-forwarder
+#kubectl apply -f splunk-deployment.yaml
 

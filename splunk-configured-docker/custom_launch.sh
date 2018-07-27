@@ -1,10 +1,14 @@
 #!/bin/sh
 
+echo "Starting custom Splunk Enterprise launch:"
+
 # Normal Splunk launch, inherited from Splunk Docker image
 /sbin/entrypoint.sh start-service & 
 # Automatic secret import
 /etc/splunk_setup/sa_secret_transfer.sh &
 wait
+
+echo "Custom server launch complete"
 exit 0
 
 
