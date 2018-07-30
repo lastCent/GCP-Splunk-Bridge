@@ -16,11 +16,21 @@
 
 // MODIFIED (slightly)
 
+
+// Can be found using:
+  // $(gcloud compute firewall-rules describe ${NODE_TAG/-node/-ssh} --format='value(sourceRanges)')
 variable gke_master_ip {
   description = "The IP address of the GKE master or a semicolon separated string of multiple IPs"
 }
 
+// Determines which Google Compute instances will have their traffic sent through the NAT-Gateway
+// Use default value for manual tagging
+  // Add tag using: gcloud compute instances add-tags [INSTANCE-NAME] --zone [ZONE] --tags [TAGS]
+// Use the output of:
+  // $(gcloud compute instance-templates describe $(gcloud compute instance-templates list --filter=name~gke-${CLUSTER_NAME} --limit=1 --uri) --format='get(properties.tags.items[0])')
+// instead, in order to mark all nodes in cluster to be NAT-ed
 variable gke_node_tag {
+  default = "Splunk-send-through-NAT-GW"
   description = "The network tag for the gke nodes"
 }
 
