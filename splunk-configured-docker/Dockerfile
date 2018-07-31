@@ -3,9 +3,6 @@ FROM splunk/splunk:latest
 ENV SPLUNK_HOME /opt/splunk
 ENV GCP_ADDON splunk-add-on-for-google-cloud-platform_120.tgz
 
-# Deploy output configuration
-#COPY outputs.conf ${SPLUNK_HOME}/etc/system/local/outputs.conf
-
 # Install GCP addon, supplied in .tgz format
 ADD splunk-add-on-for-google-cloud-platform_120.tgz ${SPLUNK_HOME}/etc/apps/
 
@@ -27,7 +24,14 @@ ENTRYPOINT ["/etc/splunk_setup/custom_launch.sh"]
 
 # Enable these before release: 
 
-# Configure Cloud Monitoring inputs
+# Set license to "Forwarder"
+# This license is free, as long as no data is indexed locally
+#COPY server.conf ${SPLUNK_HOME}/etc/systen/local/
+
+# Deploy output configuration
+#COPY outputs.conf ${SPLUNK_HOME}/etc/system/local/outputs.conf
+
+# Configure Cloud Monitoring inputs ?
 #COPY google_cloud_monitor_inputs.conf ${SPLUNK_HOME}/etc/apps/Splunk_TA_google-cloudplatform/local/
 
 # Disable splunk web interface
