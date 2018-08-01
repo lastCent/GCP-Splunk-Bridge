@@ -6,7 +6,7 @@ namespace: default
 
 replicaCount: 1
 
-hostname: splunk-h-forwarder
+hostname: panaceamvno
 
 image:
   repository: gcr.io/pantel-2decb/splunk

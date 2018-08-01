@@ -1,3 +1,4 @@
+# DEPRECATED: Use helm package instead
 # The Splunk forwarder deployment
 apiVersion: extensions/v1beta1
 kind: Deployment

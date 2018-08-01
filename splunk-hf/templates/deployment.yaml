@@ -36,8 +36,8 @@ spec:
         env:
         - name: SPLUNK_START_ARGS
           value: "--accept-license"
-        - name: SPLUNK_USER
-          value: "root"
+        #- name: SPLUNK_USER
+        #  value: "root"
       volumes:
       - name: {{ .Values.serviceAccountSecret.name }}
         secret:
