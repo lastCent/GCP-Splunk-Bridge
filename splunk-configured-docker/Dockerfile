@@ -20,7 +20,7 @@ COPY sa_secret_transfer.sh /etc/splunk_setup/
 RUN chmod 755 /etc/splunk_setup/sa_secret_transfer.sh
 
 # Insert Splunk user account file. Random password for "admin" is generated at launch. 
-COPY user-seed.conf ${SPLUNK_HOME}/etc/system/local/
+#COPY user-seed.conf ${SPLUNK_HOME}/etc/system/local/
  
 # Override parent entrypoint and add runtime secret import
 ENTRYPOINT ["/etc/splunk_setup/custom_launch.sh"]

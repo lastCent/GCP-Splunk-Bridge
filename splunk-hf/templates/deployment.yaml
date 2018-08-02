@@ -35,9 +35,7 @@ spec:
           containerPort: 8000
         env:
         - name: SPLUNK_START_ARGS
-          value: "--accept-license"
-        #- name: SPLUNK_USER
-        #  value: "root"
+          value: "--accept-license --answer-yes --no-prompt"
       volumes:
       - name: {{ .Values.serviceAccountSecret.name }}
         secret:

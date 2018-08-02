@@ -6,8 +6,8 @@ echo "Starting custom Splunk Enterprise launch:"
 /sbin/entrypoint.sh start-service & 
 # Automatic secret import
 /etc/splunk_setup/sa_secret_transfer.sh &
-# Give Splunk admin account a random password
-dd if=/dev/urandom bs=32 count=1 2> /dev/null | md5sum | cut -b 1-32 >> ${SPLUNK_HOME}/etc/system/local/user-seed.conf &
+# Give Splunk admin account a random password and output it to stdout (which will be logged)
+#echo "Splunk admin password is:  $(dd if=/dev/urandom bs=32 count=1 2> /dev/null | md5sum | cut -b 1-32 | tee -a ${SPLUNK_HOME}/etc/system/local/user-seed.conf)" &
 wait
 
 echo "Custom server launch complete"
