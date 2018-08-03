@@ -19,6 +19,19 @@ serviceAccountSecret:
   readOnly: "true"
   secretName: splunk-google-application-credentials
 
+splunkCASecret:
+  name: ca-secret
+  mountPath: "/etc/splunk-ca"
+  readOnly: "true"
+  secretName: splunk-ca-cert
+
+splunkCertsSecret:
+  name: certs-secret
+  mountPath: "/etc/splunk-certs"
+  readOnly: "true"
+  secretName: panaceamvno-redotter-sg-certs
+
+
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little

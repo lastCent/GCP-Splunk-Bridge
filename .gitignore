@@ -1,6 +1,9 @@
 # Project specific files
 # --------------------------------
 splunk-hf-*.tgz
+/secrets/
+*/ca/
+*/certs/
 
 # Terraform files
 # --------------------------------

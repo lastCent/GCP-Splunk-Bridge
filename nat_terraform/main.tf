@@ -42,12 +42,28 @@ variable zone {
   default = "europe-west1-b"
 }
 
+variable project {
+  default = "pantel-2decb"
+}
+
 variable network {
   default = "default"
 }
 
+variable bucket_name {
+  description = "Must be set manually in backend as well"
+  default = "tortoise-hull-hyujdmkj3d"  
+}
+
 provider google {
   region = "${var.region}"
+}
+
+terraform {
+  backend "gcs" {
+    bucket = "tortoise-hull-hyujdmkj3d"
+    prefix = "nat-terraform/state"
+  }
 }
 
 module "nat" {
@@ -57,6 +73,7 @@ module "nat" {
   tags       = ["${var.gke_node_tag}"]
   network    = "${var.network}"
   subnetwork = "${var.network}"
+  project = "${var.project}"
 }
 
 // Route so that traffic to the master goes through the default gateway.

@@ -7,7 +7,7 @@ echo "Starting service account secret import from mounted volume."
 
 echo -n 'google_credentials = ' >> ${SPLUNK_HOME}/etc/apps/Splunk_TA_google-cloudplatform/local/google_cloud_credentials.conf && 
 cat /etc/gcp_credentials/credentials.json | tr -d '\n' >> ${SPLUNK_HOME}/etc/apps/Splunk_TA_google-cloudplatform/local/google_cloud_credentials.conf 
-
-
 echo "Service account secret import complete." 
+
+# Secrets for the connection to the Splunk receiver are used directly from mounted volumes.
 exit 0

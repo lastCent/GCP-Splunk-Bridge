@@ -21,10 +21,21 @@ variable subscriptionName {
   description = "The name of the subscription to the logging topic"
 }
 
+variable bucket_name {
+  description = "Must be set manually in backend as well"
+  default = "tortoise-hull-hyujdmkj3d"
+}
+
 provider google {
   region = "${var.region}"
 }
 
+terraform {
+  backend "gcs" {
+    bucket = "tortoise-hull-hyujdmkj3d"
+    prefix = "pubsub-terraform/state"
+  }
+}
 
 /* Log pipeline
  * -----------------------------------------------------------
