@@ -17,7 +17,7 @@ A Splunk forwarder, ready to transfer logs from Google Stackdriver Logging to a 
 4. Deploy the Forwarder using the helmchart. 
 
 ## Architecture
-![Architecture](misc/Architecture-v1.png)
+![Architecture](misc/Architecture-v1.2.png)
 
 ## Troubleshooting
 
