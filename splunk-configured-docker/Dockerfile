@@ -16,8 +16,8 @@ COPY inputs.conf ${SPLUNK_HOME}/etc/apps/Splunk_TA_google-cloudplatform/local/
 # Transfer setup files, and make executable
 COPY custom_launch.sh /etc/splunk_setup/
 RUN chmod 755 /etc/splunk_setup/custom_launch.sh
-COPY sa_secret_transfer.sh /etc/splunk_setup/
-RUN chmod 755 /etc/splunk_setup/sa_secret_transfer.sh
+COPY launch-setup.sh /etc/splunk_setup/
+RUN chmod 755 /etc/splunk_setup/launch-setup.sh
 
 # Set license to "Forwarder" and specify CA-cert
 # This license is free, as long as no data is indexed locally
@@ -28,11 +28,11 @@ COPY server.conf ${SPLUNK_HOME}/etc/systen/local/
 COPY outputs.conf ${SPLUNK_HOME}/etc/system/local/
 
 # Insert custom panaceamvno index
-copy indexes.conf ${SPLUNK_HOME}/etc/system/local/
+COPY indexes.conf ${SPLUNK_HOME}/etc/system/local/
 
-# Insert Splunk user account file. Random password for "admin" is generated at launch. 
-#COPY user-seed.conf ${SPLUNK_HOME}/etc/system/local/
- 
+# Disable the first-time login prompt. Password for "admin" is set at deployment, check logs.
+COPY .ui_login ${SPLUNK_HOME}/etc/
+
 # Override parent entrypoint and add runtime secret import
 ENTRYPOINT ["/etc/splunk_setup/custom_launch.sh"]
 
