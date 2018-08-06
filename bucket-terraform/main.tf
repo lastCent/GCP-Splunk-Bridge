@@ -1,7 +1,7 @@
 /* Disclaimer:
  * This terraform is meant as an example of how to set up the Splunk-forwarder bucket.
  * It can't have a remote state on the bucket it creates. => No (easy) state sharing
- * Use it as an example, or "deploy once and be done with it thing". 
+ * Use it as an example, or as a "deploy once and be done with it thing". 
  * TODO: Make this applicable in single terraform-apply (currently 2 required)
  */
 
@@ -28,7 +28,7 @@ provider google {
   region = "${var.region}"
 }
 
-// Bucket
+// Bucket and permissions
 // -----------------------------------------------------------------
 resource "google_storage_bucket" "splunk-store" {
   name = "${var.bucket_name}"
@@ -44,7 +44,9 @@ resource "google_storage_bucket" "splunk-store" {
 resource "google_storage_bucket_acl" "splunk-store-restrict" {
   bucket = "${google_storage_bucket.splunk-store.name}"
   predefined_acl = "private"
-  depends_on = ["google_storage_bucket.splunk-store"]
+  depends_on = [
+    "google_storage_bucket.splunk-store"
+  ]
 }
 
 data "google_iam_policy" "sole-owner-policy" {
@@ -57,7 +59,10 @@ data "google_iam_policy" "sole-owner-policy" {
 resource "google_storage_bucket_iam_policy" "sole-owner" {
   bucket = "${google_storage_bucket.splunk-store.name}"
   policy_data = "${data.google_iam_policy.sole-owner-policy.policy_data}"
-  depends_on = ["google_storage_bucket.splunk-store", "data.google_iam_policy.sole-owner-policy"]
+  depends_on = [
+    "google_storage_bucket.splunk-store", 
+    "data.google_iam_policy.sole-owner-policy"
+  ]
 }
 
 output "bucket-link" {
