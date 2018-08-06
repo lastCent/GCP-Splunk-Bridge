@@ -25,7 +25,10 @@ RUN chmod 755 /etc/splunk_setup/sa_secret_transfer.sh
 COPY server.conf ${SPLUNK_HOME}/etc/systen/local/
 
 # Deploy output configuration
-COPY outputs.conf ${SPLUNK_HOME}/etc/system/local/outputs.conf
+COPY outputs.conf ${SPLUNK_HOME}/etc/system/local/
+
+# Insert custom panaceamvno index
+copy indexes.conf ${SPLUNK_HOME}/etc/system/local/
 
 # Insert Splunk user account file. Random password for "admin" is generated at launch. 
 #COPY user-seed.conf ${SPLUNK_HOME}/etc/system/local/
