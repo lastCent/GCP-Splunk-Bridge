@@ -4,6 +4,7 @@ splunk-hf-*.tgz
 /secrets/
 */ca/
 */certs/
+splunk-add-on-for-google-cloud-platform_*.tgz
 
 # Terraform files
 # --------------------------------
