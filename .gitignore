@@ -1,10 +1,16 @@
 # Project specific files
 # --------------------------------
 splunk-hf-*.tgz
-/secrets/
-*/ca/
-*/certs/
 splunk-add-on-for-google-cloud-platform_*.tgz
+
+# Safeguards against accidental secret publishing
+# --------------------------------
+**/secrets/
+**/ca/
+**/certs/
+**.crt
+**.pem
+**.key
 
 # Terraform files
 # --------------------------------
