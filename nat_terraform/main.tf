@@ -52,9 +52,12 @@ variable project {
 }
 
 variable network {
-  default = "default"
+  default = "splunk-fwd"
 }
 
+variable subnetwork {
+  default = "splunk-simple-subnet"
+}
 variable bucket_name {
   description = "Must be set manually in backend as well"
   default = "tortoise-hull-hyujdmkj3d"  
@@ -82,7 +85,7 @@ module "nat" {
   zone       = "${var.zone}"
   tags       = ["${var.gke_node_tag}"]
   network    = "${var.network}"
-  subnetwork = "${var.network}"
+  subnetwork = "${var.subnetwork}"
   project = "${var.project}"
 }
 
@@ -96,6 +99,7 @@ resource "google_compute_route" "gke-master-default-gw" {
   next_hop_gateway = "default-internet-gateway"
   tags             = ["${var.gke_node_tag}"]
   priority         = 700
+  project          = "${var.project}"
 }
 
 output "ip-nat-gateway" {
