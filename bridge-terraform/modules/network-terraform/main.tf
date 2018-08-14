@@ -4,20 +4,39 @@
  */
 
 variable region {
-  default = "europe-west1"
+  description = "The region where the network will reside."
 }
 
 variable zone {
-  default = "europe-west1-b"
+  description = "The zone where the network will reside."
 }
 
 variable project {
-  default = "pantel-2decb"
+  description = "The full name of the GCP project where the forwarder will be deployed."
 }
 
-variable bucket_name {
-  description = "Must be set manually in backend as well"
-  default = "tortoise-hull-hyujdmkj3d"
+variable network {
+  description = "The name of the forwarder's isolated VPC network."
+}
+
+variable subnetwork {
+  description = "The name of the forwarder's subnetwork."
+}
+
+variable subnet_cidr_range {
+  description = "The CIDR IP range available for entities on the forwarder's subnet."
+}
+
+variable cluster_name {
+  description = "The name of the forwarder's kubernetes cluster."
+}
+
+variable gke_node_tag {
+  description = "The network tag of the nodes that will have their traffic sent through the NAT-gateway."
+}
+
+variable node_count {
+  description = "The number of nodes in the forwarder's kubernetes cluster."
 }
 
 provider google {
@@ -26,24 +45,24 @@ provider google {
 
 // Backend - Location of remote state
 // --------------------------------------------------------------------------------------------------
-terraform {
-  backend "gcs" {
-    bucket = "tortoise-hull-hyujdmkj3d"
-    prefix = "network-terraform/state"
-  }
-}
+//terraform {
+//  backend "gcs" {
+//    bucket = "tortoise-hull-hyujdmkj3d"
+//    prefix = "network-terraform/state"
+//  }
+//}
 
 // The network and subnetwork
 // --------------------------------------------------------------------------------------------------
 resource "google_compute_network" "splunk-fwd-network" {
-  name = "splunk-fwd"
+  name = "${var.network}"
   project = "${var.project}"
   auto_create_subnetworks = false
 }
 
 resource "google_compute_subnetwork" "minimal-network" {
-  name = "splunk-simple-subnet"
-  ip_cidr_range = "10.10.0.0/24"
+  name = "${var.subnetwork}"
+  ip_cidr_range = "${var.subnet_cidr_range}"
   region = "${var.region}"
   network = "${google_compute_network.splunk-fwd-network.self_link}"
   enable_flow_logs = "true"
@@ -53,13 +72,20 @@ resource "google_compute_subnetwork" "minimal-network" {
 
 // The Kubernetes cluster
 // --------------------------------------------------------------------------------------------------
-resource "google_container_cluster" "splunk-tf-test" {
-  name = "splunk-fw-isolated"
+resource "google_container_cluster" "splunk-fwd" {
+  name = "${var.cluster_name}"
   zone = "${var.zone}"
   project = "${var.project}"
   network = "${google_compute_network.splunk-fwd-network.self_link}"
   subnetwork = "${google_compute_subnetwork.minimal-network.self_link}"
-  initial_node_count = 1
+  initial_node_count = "${var.node_count}"
+  node_config {
+    tags = ["${var.gke_node_tag}"]
+  }
   depends_on = ["google_compute_subnetwork.minimal-network"]
+}
+
+output "kubernetes_master_node" {
+  value = "${google_container_cluster.splunk-fwd.endpoint}"
 }
 
