@@ -20,6 +20,7 @@ splunk-add-on-for-google-cloud-platform_*.tgz
 # .tfstate files
 *.tfstate
 *.tfstate.*
+*.tfvars
 
 # Crash log files
 crash.log

@@ -60,6 +60,9 @@ variable subnetwork {
   description = "The name of the forwarder's subnetwork."
 }
 
+variable reserved-ip {
+  description = "The reserved ip (which has been whitelisted on the firewall)."
+}
 provider google {
   region = "${var.region}"
 }
@@ -70,9 +73,8 @@ provider google {
  */
 
 resource "google_compute_address" "outbound" {
-  // Make sure that this address is the one which is whitelisted on the firewall
   name = "splunk-forwarder-adr"
-  address = "104.155.58.152"
+  address = "${var.reserved-ip}"
   address_type = "EXTERNAL"
   region = "${var.region}"
   project = "${var.project}"
