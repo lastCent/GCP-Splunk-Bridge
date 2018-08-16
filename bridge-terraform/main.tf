@@ -71,6 +71,9 @@ variable node_count {
   default = 1
 }
 
+variable reserved-ip {
+  description = "The reserved ip (which has been whitelisted on the firewall)."
+}
   
 /* Provider
  * ----------------------------------------------------------------------------
@@ -145,6 +148,7 @@ module "nat-gw" {
   subnetwork = "${var.subnetwork}"
   gke_master_ip = "${module.network.kubernetes_master_node}"
   gke_node_tag = "${var.gke_node_tag}"
+  reserved-ip = "${var.reserved-ip}"
 }
 
 output "master-node-ip" {
