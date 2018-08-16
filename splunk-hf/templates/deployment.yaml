@@ -35,10 +35,6 @@ spec:
         - name: {{ .Values.splunkCertsSecret.name }}
           mountPath: {{ .Values.splunkCertsSecret.mountPath }}
           readOnly: {{ .Values.splunkCertsSecret.readOnly }}
-        # DEBUG
-        ports:
-        - name: web-ui
-          containerPort: 8000
         env:
         - name: SPLUNK_START_ARGS
           value: "--accept-license --answer-yes --no-prompt"

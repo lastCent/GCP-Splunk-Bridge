@@ -15,17 +15,10 @@ provider google {
   region = "${var.region}"
 }
 
-// Backend - Location of remote state
-// -----------------------------------------------------------------
-//terraform {
-//  backend "gcs" {
-//    bucket = "tortoise-hull-hyujdmkj3d"
-//    prefix = "certs-terraform/state"
-//  }
-//}
+/* Splunk certificate kubernetes secrets 
+ * -------------------------------------------------------------------
+ */
 
-// Splunk certificate kubernetes secrets 
-// -------------------------------------------------------------------
 resource "kubernetes_secret" "splunk-ca" {
   metadata {
     name = "splunk-ca-cert"

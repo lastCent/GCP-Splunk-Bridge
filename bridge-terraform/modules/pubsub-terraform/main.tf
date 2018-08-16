@@ -31,15 +31,6 @@ provider google {
   region = "${var.region}"
 }
 
-// Backend - Location of the remote state
-// ----------------------------------------------------------------------------
-//terraform {
-//  backend "gcs" {
-//    bucket = "tortoise-hull-hyujdmkj3d"
-//    prefix = "pubsub-terraform/state"
-//  }
-//}
-
 /* Log pipeline
  * -----------------------------------------------------------
  */ 

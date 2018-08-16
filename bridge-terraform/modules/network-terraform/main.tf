@@ -43,17 +43,10 @@ provider google {
   region = "${var.region}"
 }
 
-// Backend - Location of remote state
-// --------------------------------------------------------------------------------------------------
-//terraform {
-//  backend "gcs" {
-//    bucket = "tortoise-hull-hyujdmkj3d"
-//    prefix = "network-terraform/state"
-//  }
-//}
+/* The network and subnetwork
+ * --------------------------------------------------------------------------------------------------
+ */
 
-// The network and subnetwork
-// --------------------------------------------------------------------------------------------------
 resource "google_compute_network" "splunk-fwd-network" {
   name = "${var.network}"
   project = "${var.project}"
@@ -70,8 +63,9 @@ resource "google_compute_subnetwork" "minimal-network" {
   depends_on = ["google_compute_network.splunk-fwd-network"]
 }
 
-// The Kubernetes cluster
-// --------------------------------------------------------------------------------------------------
+/* The Kubernetes cluster
+ * --------------------------------------------------------------------------------------------------
+ */ 
 resource "google_container_cluster" "splunk-fwd" {
   name = "${var.cluster_name}"
   zone = "${var.zone}"

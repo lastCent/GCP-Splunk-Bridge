@@ -3,8 +3,9 @@
  * Variables without default values can be set in the terraform.tfvars file
  */
 
-// Variables
-// ----------------------------------------------------------------------------
+/* Variables
+ * ----------------------------------------------------------------------------
+ */
 
 // General
 variable region {
@@ -39,11 +40,6 @@ variable subscriptionName {
   description = "The name of the subscription to the logging pubsub topic."
 }
 
-// NAT-gateway
-//variable gke_master_ip {
-//  description = "The IP address of the GKE master or a semicolon separated string of multiple IPs."
-//}
-
 variable gke_node_tag {
   default = "send-through-nat"
   description = "The network tag of the nodes that will have their traffic sent through the NAT-gateway."
@@ -76,15 +72,17 @@ variable node_count {
 }
 
   
-// Provider
-// ----------------------------------------------------------------------------
+/* Provider
+ * ----------------------------------------------------------------------------
+ */
 
 provider google {
   region = "${var.region}"
 }
 
-// Backend - Location of the remote state
-// ----------------------------------------------------------------------------
+/* Backend - Location of the remote state
+ * ----------------------------------------------------------------------------
+ */
 
 terraform {
   backend "gcs" {
@@ -93,8 +91,9 @@ terraform {
   }
 }
 
-// Network module
-// ----------------------------------------------------------------------------
+/* Network module
+ * ----------------------------------------------------------------------------
+ */
 
 module "network" {
   source = "./modules/network-terraform"
@@ -109,8 +108,10 @@ module "network" {
   node_count = "${var.node_count}"
 }
 
-// PubSub module
-// ----------------------------------------------------------------------------
+/* PubSub module
+ * ----------------------------------------------------------------------------
+ */
+
 module "pubsub" {
   source = "./modules/pubsub-terraform"
   region = "${var.region}"
@@ -121,16 +122,20 @@ module "pubsub" {
   bucket_name = "${var.bucket_name}"
 }
 
-// Secrets module
-// ----------------------------------------------------------------------------
+/* Secrets module
+ * ----------------------------------------------------------------------------
+ */
+
 module "secrets" {
   source = "./modules/certs-terraform"
   region = "${var.region}"
   project = "${var.project}"
 }  
 
-// NAT module
-// ----------------------------------------------------------------------------
+/* NAT module
+ * ----------------------------------------------------------------------------
+ */
+
 module "nat-gw" {
   source = "./modules/nat-terraform"
   region = "${var.region}"

@@ -21,7 +21,6 @@ RUN chmod 755 /etc/splunk_setup/launch-setup.sh
 
 # Set license to "Forwarder" and specify CA-cert
 # This license is free, as long as no data is indexed locally
-# TODO: readd [license] active_group = Forwarder
 COPY server.conf ${SPLUNK_HOME}/etc/systen/local/
 
 # Deploy output configuration
@@ -33,20 +32,10 @@ COPY indexes.conf ${SPLUNK_HOME}/etc/system/local/
 # Disable the first-time login prompt. Password for "admin" is set at deployment, check logs.
 COPY .ui_login ${SPLUNK_HOME}/etc/
 
+# Disable splunk web interface
+COPY web.conf ${SPLUNK_HOME}/etc/system/local/
+
 # Override parent entrypoint and add runtime secret import
 ENTRYPOINT ["/etc/splunk_setup/custom_launch.sh"]
 
-# Enable these before release: 
-
-# Configure Cloud Monitoring inputs ?
-#COPY google_cloud_monitor_inputs.conf ${SPLUNK_HOME}/etc/apps/Splunk_TA_google-cloudplatform/local/
-
-# Disable splunk web interface
-#COPY web.conf ${SPLUNK_HOME}/etc/system/local/
-
-# -------------------------------------- DEBUG ----------------------------------------------------
-
-# Install curl to check that the nat-ed IP is correct
-#RUN apt-get update
-#RUN apt-get install -y curl
 

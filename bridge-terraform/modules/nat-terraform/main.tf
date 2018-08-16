@@ -18,9 +18,9 @@
  * MODIFIED (slightly)
  */ 
 
-// Variables
-// -----------------------------------------------------------------------------------------------
-
+/* Variables
+ * -----------------------------------------------------------------------------------------------
+ */
 variable gke_master_ip {
   /* The IP of the master node, prevents breaking of node-master communication
    * Can be found using:
@@ -64,18 +64,20 @@ provider google {
   region = "${var.region}"
 }
 
-// Backend - Location of remote state 
-// --------------------------------------------------------------------------------------------------
-//terraform {
-//  backend "gcs" {
-//    bucket = "tortoise-hull-hyujdmkj3d"
-//    prefix = "nat-terraform/state"
-//  }
-//}
 
+/* Nat Gateway and routing 
+ * --------------------------------------------------------------------------------------------------
+ */
 
-// Nat Gateway and routing 
-// --------------------------------------------------------------------------------------------------
+resource "google_compute_address" "outbound" {
+  // Make sure that this address is the one which is whitelisted on the firewall
+  name = "splunk-forwarder-adr"
+  address = "104.155.58.152"
+  address_type = "EXTERNAL"
+  region = "${var.region}"
+  project = "${var.project}"
+}
+
 module "nat" {
   source  = "GoogleCloudPlatform/nat-gateway/google"
   region     = "${var.region}"
@@ -84,17 +86,18 @@ module "nat" {
   network    = "${var.network}"
   subnetwork = "${var.subnetwork}"
   project = "${var.project}"
-  ip_address_name = "splunk-forwarder-adr"
+  ip_address_name = "${google_compute_address.outbound.name}"
 }
 
 // Route so that traffic to the master goes through the default gateway.
 // This fixes things like kubectl exec and logs
 resource "google_compute_route" "gke-master-default-gw" {
-  //count            = "${var.gke_master_ip == "" ? 0 : length(split(";", var.gke_master_ip))}"
-  //name             = "${var.gke_node_tag}-master-default-gw-${count.index + 1}"
-  //dest_range       = "${element(split(";", replace(var.gke_master_ip, "/32", "")), count.index)}"
-  name             = "${var.gke_node_tag}-master-default-gw-1"
-  dest_range       =  "${var.gke_master_ip}"
+  count            = "${var.gke_master_ip == "" ? 0 : length(split(";", var.gke_master_ip))}"
+  name             = "${var.gke_node_tag}-master-default-gw-${count.index + 1}"
+  dest_range       = "${element(split(";", replace(var.gke_master_ip, "/32", "")), count.index)}"
+  // Single master IP setup
+  //name             = "${var.gke_node_tag}-master-default-gw-1"
+  //dest_range       =  "${var.gke_master_ip}"
   network          = "${var.network}"
   next_hop_gateway = "default-internet-gateway"
   tags             = ["${var.gke_node_tag}"]
