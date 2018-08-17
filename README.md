@@ -20,7 +20,7 @@ terraform apply -target=module.network
 gcloud container clusters get-credentials splunk-fw-isolated
 terraform apply
 ```
-3. Download the latest version of the GCP Addon for Splunk to splunk-configured-docker, an add the destination IP-addresses (comma separated) to outputs.conf. Then build the docker image and upload it to the Google Cloud Container registry: 
+3. Download the latest version of the GCP Addon for Splunk to splunk-configured-docker, and add the destination IP-addresses (comma separated) to outputs.conf. Then build the docker image and upload it to the Google Cloud Container registry: 
 ``` 
 sudo docker build -t gcr.io/PROJECT-NAME/splunk
 sudo docker push gcr.io/PROJECT-NAME/splunk
@@ -55,3 +55,14 @@ cat $SPLUNK_HOME/var/log/splunk/metrics.log
 
 ### The Forwarder is stuck in a pending state
 Make sure the pubsub setup has been applied correctly. GCP pods will wait indefinitely if a required resource, such as a secret, is missing. 
+
+### Help, I need the Splunk Web interface to do something
+Open a port in the deployment by opening splunk-hf/templates/deployment.yaml, and inserting
+```
+ports:
+- name: web-ui
+  containerport: 8000
+```
+in the "containers:" section below "- name: splunk.
+Replace the 0 in splunk-configured-docker/web.conf with a 1 to enable the web server.
+Then repeat steps 3 and 5 from the install process. Remember to reverse these steps, as keeping the web server active is not recommended.
