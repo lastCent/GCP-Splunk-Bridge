@@ -4,7 +4,7 @@
 A Splunk forwarder, ready to transfer logs from Google Stackdriver Logging to a receiving Splunk network.
 
 ## Disclaimer:
-This is a prototype, made by an intern. Some things are probably hacky, misconfigured, and hacky. 
+This is a prototype, made by an intern. Some things are probably hacky, misconfigured, and broken. 
 
 ## Prerequisites
 * Helm
